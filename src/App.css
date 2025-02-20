@@ -1,0 +1,77 @@
+.customButton {
+  background-color: white;
+  border: none;
+}
+
+.customButton:hover {
+  background-color: rgba(128, 128, 128, 0.257);
+  border: gray; 
+}
+
+body {
+  background-image: url('./assets/background-image.jpg');
+  background-size: cover; 
+  background-position: center; 
+  background-attachment: fixed;
+  color: #1e3055;
+  font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+}
+
+h1 {
+  font-size: 65px;
+}
+
+h2 {
+  font-size: 50px;
+}
+
+.navbar, .navbar-brand {
+  background-color: #d0e5df;
+  color: #1e3055;
+}
+
+.product-catalog, .shopping-bag, .not-found, .welcome-message, .product-detail, .loginForm{
+  background-color: rgba(232, 208, 209, .8);
+}
+
+.btn-primary {
+  background-color: #14b0bf;
+  border: #14b0bf;
+}
+
+.btn-primary:hover {
+  background-color: #d39516;
+  border: #d39516;
+}
+
+.btn-secondary {
+  background-color: #1e3055;
+  border:  #1e3055;
+}
+
+.btn-secondary:hover {
+  background-color: #d39516;
+  border: #d39516;
+}
+
+.userCard .card-body{
+  background-color: aliceblue;
+  border-radius: 5px;
+}
+
+.card-header {
+  background-color: white;
+}
+
+.card-body {
+  background-color: #bebecb;  
+}
+
+a { 
+  color: #1e3055;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
