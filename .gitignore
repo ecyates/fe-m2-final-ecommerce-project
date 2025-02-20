@@ -23,4 +23,4 @@ dist-ssr
 *.sln
 *.sw?
 
-./src/utilities/apiUtilities.ts
+/src/utilities/apiUtilities.ts
