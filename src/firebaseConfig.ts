@@ -2,8 +2,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, Auth } from "firebase/auth";
 import { getFirestore } from 'firebase/firestore';
-// import { myApiKey } from "./utilities/apiUtilities";
-
 import dotenv from "dotenv";
 dotenv.config();
 
