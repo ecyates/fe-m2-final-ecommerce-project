@@ -1,12 +1,11 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "Node",
+    "module": "CommonJS",
     "target": "ESNext",
     "jsx": "react-jsx",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["jest", "@testing-library/jest-dom"]
+    "types": ["jest", "@testing-library/jest-dom"],
   },
   "include": ["jest-setup.ts", "src/**/*"],
   "exclude": ["node_modules", "tests", "**/*.test.ts", "**/*.spec.ts"]
