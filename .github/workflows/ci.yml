@@ -1,6 +1,4 @@
 name: CI Pipeline
-env:
-  VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
 
 # Run the workflow on pushes and pull requests
 on:
