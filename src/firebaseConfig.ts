@@ -6,7 +6,10 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const firebaseConfig = {
-    apiKey: process.env.VITE_API_KEY,
+    apiKey: 
+        typeof process !== "undefined" && process.env.VITE_API_KEY // Jest (Node.js)
+        ? process.env.VITE_API_KEY
+        : import.meta.env.VITE_API_KEY, // Vite (Browser)
     authDomain: "fir-ecommerce-app-4b633.firebaseapp.com",
     projectId: "fir-ecommerce-app-4b633",
     storageBucket: "fir-ecommerce-app-4b633.firebasestorage.app",
