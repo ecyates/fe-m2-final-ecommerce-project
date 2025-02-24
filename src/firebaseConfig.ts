@@ -2,14 +2,10 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, Auth } from "firebase/auth";
 import { getFirestore } from 'firebase/firestore';
-import dotenv from "dotenv";
-dotenv.config();
-
-const API_KEY = import.meta.env.VITE_API_KEY;
-// const API_KEY = process.env.API_KEY;
+import { apiKey } from "./utilities/apiUtilities";
 
 const firebaseConfig = {
-    apiKey: API_KEY,
+    apiKey: apiKey,
     authDomain: "fir-ecommerce-app-4b633.firebaseapp.com",
     projectId: "fir-ecommerce-app-4b633",
     storageBucket: "fir-ecommerce-app-4b633.firebasestorage.app",
