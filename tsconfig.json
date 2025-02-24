@@ -1,12 +1,26 @@
+// {
+//   "compilerOptions": {
+//     "module": "CommonJS",
+//     "target": "ESNext",
+//     "jsx": "react-jsx",
+//     "esModuleInterop": true,
+//     "allowSyntheticDefaultImports": true,
+//     "types": ["jest", "@testing-library/jest-dom"],
+//   },
+//   "include": ["jest-setup.ts", "src/**/*"],
+//   "exclude": ["node_modules", "tests", "**/*.test.ts", "**/*.spec.ts"]
+// }
+
 {
   "compilerOptions": {
-    "module": "CommonJS",
+    "module": "ESNext",
     "target": "ESNext",
     "jsx": "react-jsx",
+    "moduleResolution": "Node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["jest", "@testing-library/jest-dom"],
+    "types": ["vite/client"]
   },
-  "include": ["jest-setup.ts", "src/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "tests", "**/*.test.ts", "**/*.spec.ts"]
 }

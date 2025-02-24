@@ -7,4 +7,9 @@ module.exports = {
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
     transformIgnorePatterns: ["<rootDir>/node_modules/", "/node_modules/(?!bootstrap)/"],
     setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+    globals: {
+        "ts-jest": {
+            tsconfig: "tsconfig.jest.json"
+        }
+    }
 };
