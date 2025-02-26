@@ -1,3 +1,4 @@
+import { Timestamp } from "firebase/firestore";
 export interface Product {
     id?: string;
     title:string;
@@ -11,6 +12,7 @@ export interface Cart {
     id?:string; // could the id be the userId? 
     products: {[id:string]: number}; // id:quantity
     totalItems: number;
+    totalPrice: number; 
 };
 
 export interface User {
@@ -20,3 +22,12 @@ export interface User {
     phone: string;
     address: string;
 };
+
+export interface Order {
+    id?: string;
+    userId: string; 
+    products: { [id: string]: number };
+    totalItems: number;
+    totalPrice: number;
+    date: string;
+}

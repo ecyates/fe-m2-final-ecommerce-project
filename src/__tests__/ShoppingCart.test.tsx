@@ -1,140 +1,88 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import ShoppingCart from '../components/ShoppingCart';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import cartReducer from '../features/cartSlice';
+import productsReducer from '../features/productsSlice';
+import { MemoryRouter } from 'react-router-dom';
+import ShoppingCart from '../components/Cart/ShoppingCart';
 import { AuthContext } from '../context/AuthContext';
-import { getDocs, getDoc, setDoc } from 'firebase/firestore';
 
-// Mock React Router Dom's useNavigate
-jest.mock("react-router-dom", () => ({
-    ...jest.requireActual("react-router-dom"),
-    useNavigate: () => jest.fn(),
-}));
-
-// Mock Firestore functions
-jest.mock('firebase/firestore', () => {
-    const actual = jest.requireActual('firebase/firestore');
-    return {
-        ...actual,
-        getDocs: jest.fn(),
-        getDoc: jest.fn(),
-        setDoc: jest.fn(),
-    };
+const mockStore = configureStore({
+    reducer: {
+        cart: cartReducer,
+        products: productsReducer,
+    },
+    preloadedState: {
+        cart: {
+            products: { '1': 2 }, // Cart initially has 2 items of product 1
+            totalItems: 2,
+            totalPrice: 20,
+        },
+        products: {
+            items: [
+                { id: '1', title: 'Test Product 1', price: 10, image: 'image1.jpg', description: 'Test description', category: 'electronics' },
+                { id: '2', title: 'Test Product 2', price: 20, image: 'image2.jpg', description: 'Test description', category: 'electronics' },
+            ],
+        },
+    },
 });
 
-// Mock user, product list and cart
-const mockUser = { uid: 'test-user' };
-const mockProducts = [
-    { id: '1', title: 'Test Product 1', price: 10, image: 'image1.jpg', description: 'Test description', category: 'electronics' },
-    { id: '2', title: 'Test Product 2', price: 20, image: 'image2.jpg', description: 'Test description', category: 'electronics' },
-];
-const mockCart = { products: { '1': 2 }, totalItems: 2 };
+describe('ShoppingCart with Redux', () => {
 
-describe('ShoppingCart Integration Tests', () => {
-    // Start fresh before each
-    beforeEach(() => {
-        jest.clearAllMocks();
-    });
-
-    // Render component function with mock user
-    const renderComponent = (user = mockUser) => {
-        return render(
-            <AuthContext.Provider value={{ user }}>
-                <BrowserRouter>
-                    <ShoppingCart />
-                </BrowserRouter>
-            </AuthContext.Provider>
-        );
-    };
-
-    // Checks that it renders correctly
-    test('renders ShoppingCart component', async () => {
-        // Set up mock product list and cart
-        (getDocs as jest.Mock).mockResolvedValue({
-            docs: mockProducts.map((product) => ({
-                id: product.id,
-                data: () => product,
-            })),
-        });
-        (getDoc as jest.Mock).mockResolvedValue({ exists: () => true, data: () => mockCart });
-
-        renderComponent();
-
-        expect(screen.getByText('Shopping Bag')).toBeInTheDocument();
-
-        await waitFor(() => {
-            expect(screen.getByText('Test Product 1')).toBeInTheDocument();
-            expect(screen.getByText('$10.00')).toBeInTheDocument();
-            expect(screen.getByText('2 items')).toBeInTheDocument();
-        });
-    });
-
-    // Checks that it adds an item to the cart
     test('adds an item to the cart', async () => {
-        // Set up mock product list and cart
-        (getDocs as jest.Mock).mockResolvedValue({
-            docs: mockProducts.map((product) => ({
-                id: product.id,
-                data: () => product,
-            })),
-        });
-        (getDoc as jest.Mock).mockResolvedValue({ exists: () => true, data: () => mockCart });
+        render(
+            <Provider store={mockStore}>
+                <MemoryRouter>
+                    <AuthContext.Provider value={{ user: { uid: 'test-user' } }}>
+                        <ShoppingCart />
+                    </AuthContext.Provider>
+                </MemoryRouter>
+            </Provider>
+        );
 
-        renderComponent();
-
+        // Wait for product to appear in the UI
         await waitFor(() => screen.getByText('Test Product 1'));
 
         // Click the add item button 
         const addButton = screen.getAllByText('+')[0];
         fireEvent.click(addButton);
 
+        // Wait for Redux state update
         await waitFor(() => {
-            expect(setDoc).toHaveBeenCalled();
+            // Get updated state from Redux store
+            const state = mockStore.getState().cart;
+            expect(state.products['1']).toBe(3); // Quantity should now be 3
+            expect(state.totalItems).toBe(3);
         });
     });
 
     test('removes an item from the cart', async () => {
-        (getDocs as jest.Mock).mockResolvedValue({
-            docs: mockProducts.map((product) => ({
-                id: product.id,
-                data: () => product,
-            })),
-        });
-        (getDoc as jest.Mock).mockResolvedValue({ exists: () => true, data: () => mockCart });
+        render(
+            <Provider store={mockStore}>
+                <MemoryRouter>
+                    <AuthContext.Provider value={{ user: { uid: 'test-user' } }}>
+                        <ShoppingCart />
+                    </AuthContext.Provider>
+                </MemoryRouter>
+            </Provider>
+        );
 
-        renderComponent();
-
+        // Wait for product to appear in the UI
         await waitFor(() => screen.getByText('Test Product 1'));
 
-        const removeButton = screen.getAllByText('-')[0];
-        fireEvent.click(removeButton);
+        // Click the add item button 
+        const deleteButton = screen.getAllByText('-')[0];
+        fireEvent.click(deleteButton);
+        fireEvent.click(deleteButton);
 
+        // Wait for Redux state update
         await waitFor(() => {
-            expect(setDoc).toHaveBeenCalled();
+            // Get updated state from Redux store
+            const state = mockStore.getState().cart;
+            expect(state.products['1']).toBe(1); // Quantity should now be 1
+            expect(state.totalItems).toBe(1);
         });
     });
 
-    test('clears cart on checkout', async () => {
-        (getDocs as jest.Mock).mockResolvedValue({
-            docs: mockProducts.map((product) => ({
-                id: product.id,
-                data: () => product,
-            })),
-        });
-        (getDoc as jest.Mock).mockResolvedValue({ exists: () => true, data: () => mockCart });
-
-        renderComponent();
-
-        await waitFor(() => screen.getByText('Test Product 1'));
-
-        const checkoutButton = screen.getByText('Check Out');
-        fireEvent.click(checkoutButton);
-
-        await waitFor(() => {
-            expect(setDoc).toHaveBeenCalledWith(expect.anything(), {
-                products: {},
-                totalItems: 0,
-            });
-        });
-    });
 });

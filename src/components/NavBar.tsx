@@ -9,32 +9,34 @@ import { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { Cart } from '../utilities/objectUtilities';
 import { db } from '../firebaseConfig';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store';
 
 function NavBar(){
     const navigate = useNavigate();
     const { user } = useAuth();
-    const [cartCount, setCartCount] = useState<number>(0);
+    const cartCount = useSelector((state:RootState)=>state.cart.totalItems);
 
-    useEffect(()=>{
-        const fetchCartCount = async () =>{
-            let cart = { products: {}, totalItems: 0 };
-            // Fetch user cart only if user exists
-            if (user) {
-                const cartRef = doc(db, 'cart', user.uid);
-                const cartSnap = await getDoc(cartRef);
-                if (cartSnap.exists()) {
-                    cart = (cartSnap.data() as Cart);
-                }
-            }else{
-                const guestCart = localStorage.getItem('guest-cart');
-                if (guestCart){
-                    cart = JSON.parse(guestCart);
-                }
-            }
-            setCartCount(cart.totalItems);
-        }
-        fetchCartCount();
-    }, []);
+    // useEffect(()=>{
+    //     const fetchCartCount = async () =>{
+    //         let cart = { products: {}, totalItems: 0 };
+    //         // Fetch user cart only if user exists
+    //         if (user) {
+    //             const cartRef = doc(db, 'cart', user.uid);
+    //             const cartSnap = await getDoc(cartRef);
+    //             if (cartSnap.exists()) {
+    //                 cart = (cartSnap.data() as Cart);
+    //             }
+    //         }else{
+    //             const guestCart = localStorage.getItem('guest-cart');
+    //             if (guestCart){
+    //                 cart = JSON.parse(guestCart);
+    //             }
+    //         }
+    //         setCartCount(cart.totalItems);
+    //     }
+    //     fetchCartCount();
+    // }, []);
 
     const handleLogout = async () =>{
         try {
@@ -59,7 +61,7 @@ function NavBar(){
                 {user?
                     <>
                     <Nav.Link href='/add-product/'> Add New Product</Nav.Link>
-                    <Nav.Link href="/add-user/">Users</Nav.Link>
+                    <Nav.Link href="/users/">Users</Nav.Link>
                     <Nav.Link onClick={()=>handleLogout()}><FontAwesomeIcon icon={faArrowRightFromBracket} /> Sign Out</Nav.Link>
                     </>
                     :<Nav.Link onClick={()=>navigate('/login/')}><FontAwesomeIcon icon={faChevronCircleRight}/> Sign In | Register</Nav.Link>

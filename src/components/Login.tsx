@@ -39,7 +39,7 @@ const Login = () => {
                 address: '',
             });
             alert('Registration successful!');
-            navigate('/home/');
+            navigate(`/edit-user/${user.uid}`);
         }catch(err:any){
             setError(err.message);
         }

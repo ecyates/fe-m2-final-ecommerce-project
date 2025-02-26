@@ -1,5 +1,5 @@
 import { Container, Button, Spinner, Alert } from "react-bootstrap";
-import ProductCatalog from "./ProductCatalog";
+import ProductCatalog from "./Products/ProductCatalog";
 import { useState, useEffect } from "react";
 import { faChevronCircleRight, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
