@@ -96,7 +96,7 @@ const ShoppingCart: React.FC = () => {
                 <tr>
                     <td></td>
                     <td className='text-end'>Totals:</td>
-                    <td className='text-end'>${cart.totalPrice.toFixed(2)}</td>
+                    <td className='text-end'>${(cart.totalPrice??0).toFixed(2)}</td>
                     <td className='text-start'>&nbsp;{cart.totalItems} items</td>
                 </tr>
                 </tbody>
