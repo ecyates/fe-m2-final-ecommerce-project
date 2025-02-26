@@ -79,7 +79,7 @@ const ShoppingCart: React.FC = () => {
                             alt={product.title} 
                             style={{width:'50px', marginRight:'10px'}}/></td>
                         <td><a href={`/product-detail/${product.id}`}>{product.title}</a></td> 
-                        <td className='text-end'>${product.price.toFixed(2)}</td>
+                        <td className='text-end'>${(product.price??0).toFixed(2)}</td>
                         <td >
                         <Table bordered style={{width:'100px'}} className='m-0'>
                             <tbody>
