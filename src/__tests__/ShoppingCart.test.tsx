@@ -8,6 +8,7 @@ import { MemoryRouter } from 'react-router-dom';
 import ShoppingCart from '../components/Cart/ShoppingCart';
 import { AuthContext } from '../context/AuthContext';
 
+// Create a mock Redux store
 const mockStore = configureStore({
     reducer: {
         cart: cartReducer,
@@ -29,7 +30,7 @@ const mockStore = configureStore({
 });
 
 describe('ShoppingCart with Redux', () => {
-
+    // Test that the shopping cart adds an item to the cart when the + button is clicked
     test('adds an item to the cart', async () => {
         render(
             <Provider store={mockStore}>
@@ -41,7 +42,7 @@ describe('ShoppingCart with Redux', () => {
             </Provider>
         );
 
-        // Wait for product to appear in the UI
+        // Wait for product to appear 
         await waitFor(() => screen.getByText('Test Product 1'));
 
         // Click the add item button 
@@ -57,6 +58,7 @@ describe('ShoppingCart with Redux', () => {
         });
     });
 
+    // Test that the shopping cart removes an item to the cart when the - button is clicked
     test('removes an item from the cart', async () => {
         render(
             <Provider store={mockStore}>
@@ -68,10 +70,10 @@ describe('ShoppingCart with Redux', () => {
             </Provider>
         );
 
-        // Wait for product to appear in the UI
+        // Wait for product to appear
         await waitFor(() => screen.getByText('Test Product 1'));
 
-        // Click the add item button 
+        // Click the remove item button 
         const deleteButton = screen.getAllByText('-')[0];
         fireEvent.click(deleteButton);
         fireEvent.click(deleteButton);
@@ -84,5 +86,4 @@ describe('ShoppingCart with Redux', () => {
             expect(state.totalItems).toBe(1);
         });
     });
-
 });

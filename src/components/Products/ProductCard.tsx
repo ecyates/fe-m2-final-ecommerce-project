@@ -9,6 +9,8 @@ import { fetchProducts } from '../../features/productsSlice';
 import { Product } from '../../utilities/objectUtilities';
 import { RootState, AppDispatch } from '../../store';
 import { Badge, Card, Button} from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 const ProductCard: React.FC<ProductCardProps> = ({ productId }) => {
     const products = useSelector((state:RootState)=>state.products.items);
@@ -34,6 +36,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ productId }) => {
     const deleteProduct = async(id:string)=>{
         try{
             await deleteDoc(doc(db, 'products', id));
+            alert('Product was successfully deleted!');
         }catch(error){
             console.error(error);
         }
@@ -42,6 +45,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ productId }) => {
     // Function to add product to cart
     const handleAddToCart = (id:string, price:number) => {
         dispatch(addItem({id, price}));
+        alert('Product was added to cart!');
     };
 
     return(
@@ -62,10 +66,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ productId }) => {
                 <Card.Text>{product.description}</Card.Text>
                 <Card.Title className='text-white'><strong>${product.price.toFixed(2)|| "N/A"}</strong></Card.Title>
                 <Button variant="primary" onClick={()=>{handleAddToCart(product.id, product.price)}}>Add to Cart</Button>&nbsp;
-                {!user?<Button variant="secondary" onClick={()=>{navigate(`/product-detail/${product.id}`)}}>View Details</Button>:
-                <Button variant="secondary" onClick={()=>{navigate(`/edit-product/${product.id}`)}}>Edit Product</Button>}
-                {user&&<div><Button className='mt-3' variant='danger' onClick={()=>deleteProduct(product.id)}>Delete Product</Button></div>}
-                </div>
+                <Button variant="secondary" onClick={()=>{navigate(`/product-detail/${product.id}`)}}>View Details</Button>
+                <div className='mt-3' >{user&&<><Button variant="light" onClick={()=>{navigate(`/edit-product/${product.id}`)}}><FontAwesomeIcon icon={faEdit}/></Button>&nbsp;
+                <Button variant='danger' onClick={()=>deleteProduct(product.id)}><FontAwesomeIcon icon={faTrash}/></Button></>}
+                </div></div>
             </Card.Body>
         </Card>)}
         </>

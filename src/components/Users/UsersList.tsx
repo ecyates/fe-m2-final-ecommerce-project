@@ -14,8 +14,6 @@ const UsersList = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>('');
 
-
-
     // Fetch users on mount
     useEffect(() => {
         const fetchUsers = async () => {
@@ -26,19 +24,16 @@ const UsersList = () => {
                 setUsers(usersList);
                 setIsLoading(false);
                 setError('');
-            }catch(error)
-            {
-                setError(error.message);
+            }catch(error){
+                setError('Error fetching users: '+error.message);
             }
         };
-        
         fetchUsers();
     }, []);
 
-
     return (
-        <Container className="d-flex justify-content-center align-items-center min-vh-100 loginForm mt-5 p-5 rounded shadow-lg">
-        <div>
+        <Container className='product-catalog p-3 rounded mt-5 p-5 shadow-lg'>            
+        <div> 
         {id&&<UserProfileForm userId={id}/>}
         <h1 className='text-center mt-3'>Users</h1>
         <Row className='d-flex justify-content-around align-items-center'>
@@ -47,7 +42,7 @@ const UsersList = () => {
         {error&&<Alert variant='danger'>{error}</Alert>}
         </div>
             {users.length === 0 ? (
-                <span>Currently no users...</span>
+                (!isLoading&&<span>Currently no users...</span>)
             ) : (<>{users.map((u) => (
                     <Col key={u.id} className='mb-3'>
                         <UserCard userId={u.id}/>

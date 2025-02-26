@@ -16,10 +16,10 @@ const ShoppingCart: React.FC = () => {
     const error = useSelector((state:RootState)=>state.products.error);
     const cart = useSelector((state:RootState)=>state.cart);
     const [cartProducts, setCartProducts] = useState<Product[]>([]);;
-
     const { user } = useAuth();
     const dispatch = useDispatch<AppDispatch>();
 
+    // Fetch products and set cart whenever the products or cart are updated or dispatch is used
     useEffect(()=>{
         const getProducts = (id:string) => {
             const product = products.find((product)=>product.id===id);
@@ -31,25 +31,32 @@ const ShoppingCart: React.FC = () => {
         setCartProducts((Object.entries(cart.products).map(([id])=>getProducts(id))));
     },[products, cart, dispatch]);
 
+    // Function to add item to cart
     const handleAddToCart = (id:string, price: number)=>{
         dispatch(addItem({id, price}));
     };
 
+    // Function to remove item from cart
     const handleRemoveFromCart = (id:string, price: number)=>{
         dispatch(removeItem({id, price}));
     };
 
+    // Function to handle checkout
     const handleCheckout = async (userId:string)=>{
+        // Create an order based on the cart
         const order = {
-            userId: userId || "guest",
+            userId: userId || "guest", // use 'guest' if no user
             products: cart.products,
             totalPrice: cart.totalPrice,
             totalItems: cart.totalItems,
-            date: new Date().toISOString(),
+            date: new Date().toISOString(), // Include date of when the order was placed
         };
         try{
+            // Save order to Firestore
             await dispatch(saveOrderToFirestore(order));
+            // Clear the cart
             dispatch(checkout());
+            // Thank customer for purchase
             alert('Thank you for your purchase!');
         }catch(error){
             console.error(error);
@@ -64,11 +71,11 @@ const ShoppingCart: React.FC = () => {
             <div className='text-center'>
                 <Spinner animation='border' role='status'><span className='visually-hidden'>Loading...</span></Spinner>
             </div>:
-            <>
+            <> {/* Display if the cart is empty. */}
             {cartProducts.length===0 ?(
                 <div className='text-center'>
-                <div className='lead mb-3'>Your shopping bag is currently empty...</div>
-                <Link to="/home"><Button className="ms-2 btn btn-secondary">Keep Shopping</Button></Link>
+                {isLoading==='succeeded'&&<><div className='lead mb-3'>Your shopping bag is currently empty...</div>
+                <Link to="/home"><Button className="ms-2 btn btn-secondary">Keep Shopping</Button></Link></>}
                 </div>):(
                 <><Table striped hover className="rounded">
                 <tbody>
@@ -78,7 +85,7 @@ const ShoppingCart: React.FC = () => {
                             src={product.image|| 'https://images.unsplash.com/photo-1533035353720-f1c6a75cd8ab?q=80&w=1587&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'} 
                             alt={product.title} 
                             style={{width:'50px', marginRight:'10px'}}/></td>
-                        <td><a href={`/product-detail/${product.id}`}>{product.title}</a></td> 
+                        <td><Link to={`/product-detail/${product.id}`}>{product.title}</Link></td> 
                         <td className='text-end'>${(product.price??0).toFixed(2)}</td>
                         <td >
                         <Table bordered style={{width:'100px'}} className='m-0'>
@@ -102,6 +109,7 @@ const ShoppingCart: React.FC = () => {
                 </tbody>
             </Table>
             <div className='text-end'>
+            {/* Buttons to check out or continue shopping. */}
             <Button className='btn btn-primary' onClick={()=>{handleCheckout(user?.uid || '')}}>Check Out</Button>
             <Link to="/home"><Button className="ms-2 btn btn-secondary">Keep Shopping</Button></Link>
             </div>

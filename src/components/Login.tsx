@@ -16,19 +16,39 @@ const Login = () => {
     const {user, loading} = useAuth();
     const navigate = useNavigate();
 
-    const handleLogin = async(e:FormEvent) => {
-        e.preventDefault();
-        try {
-            await signInWithEmailAndPassword(auth, email, password);
-            alert('Login successful!');
-            navigate('/home/');
-        }catch(err:any){
-            setError(err.message);
+    // Function to validate the password
+    const validatePassword = (password: string) => {
+        const minLength = /.{8,}/; // At least 8 characters
+        const uppercase = /[A-Z]/; // At least one uppercase letter
+        const lowercase = /[a-z]/; // At least one lowercase letter
+        const number = /[0-9]/; // At least one number
+        const specialChar = /[!@#$%^&*(),.?":{}|<>]/; // At least one special character
+    
+        if (
+            !minLength.test(password) ||
+            !uppercase.test(password) ||
+            !lowercase.test(password) ||
+            !number.test(password) ||
+            !specialChar.test(password)
+        ) {
+            return "Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character.";
         }
+        return null; // No errors
     };
-
-    const handleRegister = async (e:FormEvent)=>{
+    
+    // Function to handle registering a new user
+    const handleRegister = async (e: FormEvent) => {
         e.preventDefault();
+        // Validate the password and return error if applicable
+        const passwordError = validatePassword(password);
+        if (passwordError) {
+            setError(passwordError);
+            setEmail('');
+            setPassword('');
+            return;
+        }
+        
+        // If no error with password, create user with Firebase
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
@@ -39,23 +59,42 @@ const Login = () => {
                 address: '',
             });
             alert('Registration successful!');
-            navigate(`/edit-user/${user.uid}`);
-        }catch(err:any){
-            setError(err.message);
+            navigate(`/edit-user/${user.uid}`); // Navigate to set up the user profile
+        } catch (error: any) {
+            setError('Error registering: '+error.message);
+            setEmail('');
+            setPassword('');
         }
     };
 
+    // Function to handle logging in
+    const handleLogin = async(e:FormEvent) => {
+        e.preventDefault();
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            alert('Login successful!');
+            navigate('/home/');
+        }catch(error:any){
+            setError('Error logging in: '+error.message);
+            setEmail('');
+            setPassword('');
+        }
+    };
+
+    // Function to handle logging out
     const handleLogout = async (e:FormEvent) => {
         e.preventDefault();
         try{
             await signOut(auth);
             alert('Successfully logged out!');
             navigate('/home/');
-        }catch(err:any){
-            setError(err.message);
+        }catch(error:any){
+            setError('Error logging out: '+error.message);
+            setEmail('');
+            setPassword('');
         }
     }
-
+    
     return (
     <Container className="d-flex justify-content-center align-items-center min-vh-100">
         <div className="loginForm mt-5 p-5 rounded text-center shadow-lg">
@@ -77,6 +116,7 @@ const Login = () => {
                         placeholder="Enter Your Email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        onClick={()=>setError('')}
                     />
                 </Form.Group>
                 <Form.Group className="mb-3">
@@ -85,6 +125,7 @@ const Login = () => {
                         placeholder="Enter Your Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        onClick={()=>setError('')}
                     />
                 </Form.Group>
                 <Form.Group className="mb-3 text-center">

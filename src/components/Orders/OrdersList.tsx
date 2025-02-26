@@ -13,16 +13,7 @@ const OrdersList = ({ userId }: { userId: string }) => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>('');
 
-    // deleteUser Function
-    const deleteOrder = async (orderId: string) => {
-        try {
-            await deleteDoc(doc(db, 'orders', orderId));
-            setOrders((prevOrders) => prevOrders.filter(order => order.id !== orderId));
-        } catch (error: any) {
-            setError(`Error deleting order: ${error.message}`);
-        }
-    };
-
+    // Fetch the orders list for the given user Id
     useEffect(() => {
         const fetchData = async () => {
             if (!userId) return;
@@ -45,11 +36,21 @@ const OrdersList = ({ userId }: { userId: string }) => {
         fetchData();
     }, [userId]);
 
+    // Function to delete order
+    const deleteOrder = async (orderId: string) => {
+        try {
+            await deleteDoc(doc(db, 'orders', orderId));
+            setOrders((prevOrders) => prevOrders.filter(order => order.id !== orderId));
+        } catch (error: any) {
+            setError(`Error deleting order: ${error.message}`);
+        }
+    };
+
     return (
         <span>
         {isLoading&&<Spinner animation='border' role='status'><span className='visually-hidden'>Loading...</span></Spinner>}
         {error&&<Alert variant='danger'>{error}</Alert>}
-            {orders.length !== 0 &&  
+            {orders.length !== 0 ?  
             <>
                 <div className='text-center mt-3'><b>Orders</b></div>
                 <ul>
@@ -57,13 +58,15 @@ const OrdersList = ({ userId }: { userId: string }) => {
                     <Link to={`/order-details/${order.id}`} >
                         {new Date(order.date).toLocaleDateString()}
                     </Link> 
-                    <Button className='btn btn-danger mx-3' onClick={()=>deleteOrder(order.id)}>
+                    <Button variant='outline-danger' className='btn-sm mx-3' onClick={()=>deleteOrder(order.id)}>
                     X
                     </Button>
                     </li>
                 ))}
                 </ul>
-            </>}
+            </>:
+                <div className='text-center mt-3'><b>No orders in the system...</b></div>
+            }
         </span>
     );
 };

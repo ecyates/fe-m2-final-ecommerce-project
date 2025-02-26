@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Container, Button, Spinner, Alert } from 'react-bootstrap';
 import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
@@ -8,18 +8,20 @@ import { useAuth } from "../../context/AuthContext";
 import { Product } from '../../utilities/objectUtilities';
 import { addItem } from "../../features/cartSlice";
 import { RootState } from "../../store";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons'
 
 const ProductDetails: React.FC = () => {
     const { id } = useParams();
     const products = useSelector((state:RootState)=>state.products.items);
     const isLoading = useSelector((state:RootState)=>state.products.status);
     const error = useSelector((state:RootState)=>state.products.error);
-
     const { user } = useAuth();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [product, setProduct] = useState<Product>({ title: 'Unknown Product', description: '', category: '', price: 0, image: ''});
 
+    // When product list or id are updated, find the product to display among the list
     useEffect(()=>{
         if (id){
             let p = products.find(product=>product.id===id);
@@ -27,16 +29,21 @@ const ProductDetails: React.FC = () => {
         }
     },[products, id]);
 
+    // Delete Product function
     const deleteProduct = async(id:any)=>{
         try{
             await deleteDoc(doc(db, 'products', id));
+            alert('Product was successfully deleted!');
+            navigate('/home');
         }catch(error){
             console.error(error);
         }
     }
 
+    // Function to add product to cart
     const handleAddToCart = (id:string, price: number)=>{
         dispatch(addItem({id, price}));
+        alert('Product was added to cart.');
     }
 
     return (
@@ -54,11 +61,15 @@ const ProductDetails: React.FC = () => {
             <h1>{product.title}</h1>
             <p className='lead'>Price: ${product.price.toFixed(2)}</p>
             <p className="mt-3">{product.description || 'No description available.'}</p>
-            <div>
-                {product.title !=='Unknown Product' && <Button variant="primary" className="mx-2" onClick={() => handleAddToCart(id, product.price)}>Add to Cart</Button>}
-                <Button onClick={()=>navigate('/home/')} className="mx-2 btn btn-secondary">Keep Shopping</Button>
+            <div className='text-center'>
+                {product.title !=='Unknown Product' && <Button variant="primary" onClick={() => handleAddToCart(id, product.price)}>Add to Cart</Button>}&nbsp;
+                <Button onClick={()=>navigate('/home/')} className="btn btn-secondary">Keep Shopping</Button>
             </div>
-            {user&&<div className='mt-3'><Button variant='danger' onClick={()=>deleteProduct(product.id)}>Delete Product</Button></div>}
+            <div className='text-center mt-3' >
+                {user&&<>
+                <Button variant="dark" onClick={()=>{navigate(`/edit-product/${product.id}`)}}><FontAwesomeIcon icon={faEdit}/></Button>&nbsp;
+                <Button variant='danger' onClick={()=>deleteProduct(product.id)}><FontAwesomeIcon icon={faTrash}/></Button></>}
+            </div>        
         </Container>
     );    
 };

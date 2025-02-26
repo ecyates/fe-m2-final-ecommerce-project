@@ -28,6 +28,7 @@ const mockStore = configureStore({
 });
 
 describe("ProductCard Component", () => {
+    // Test that the Product Card renders correctly
     it("renders product details correctly", () => {
         render(
             <Provider store={mockStore}>

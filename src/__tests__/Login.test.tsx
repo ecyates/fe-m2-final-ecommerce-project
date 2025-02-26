@@ -8,6 +8,7 @@ import { useAuth } from "../context/AuthContext";
 import { setDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 
+// Mock React Router Dom useNavigate
 jest.mock("react-router-dom", () => ({
     ...jest.requireActual("react-router-dom"),
     useNavigate: () => jest.fn(),
@@ -101,7 +102,7 @@ describe("Login Component", () => {
 
     // Simulating clicking the sign out button
     test('calls signOut on logout', async () => {
-        // simulate no user being signed in
+        // simulate a user being signed in
         (useAuth as jest.Mock).mockReturnValue({ user: { uid: '9w9o6dc27uOfVt989cOgoKjVNGc2' }, loading: false, error: null });
 
         render(
