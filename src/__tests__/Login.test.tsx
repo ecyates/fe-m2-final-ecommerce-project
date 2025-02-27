@@ -1,8 +1,9 @@
+// Login.test.tsx
 import React = require("react");
 import Login from "../components/Login";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, getAuth } from "firebase/auth";
 import { act } from "react";
 import { useAuth } from "../context/AuthContext";
 import { setDoc } from "firebase/firestore";
@@ -19,11 +20,13 @@ jest.mock("firebase/auth", () => {
     const actualAuth = jest.requireActual("firebase/auth");
     return {
         ...actualAuth,
-        getAuth: jest.fn(() => ({})),
+        getAuth: jest.fn(() => ({ currentUser: null })), // Ensure auth instance is valid
         signInWithEmailAndPassword: jest.fn(() => 
             Promise.resolve({ user: { uid: "9w9o6dc27uOfVt989cOgoKjVNGc2" } })
         ),
-        createUserWithEmailAndPassword: jest.fn(),
+        createUserWithEmailAndPassword: jest.fn(() => 
+            Promise.resolve({ user: { uid: "test-user-uid" } }) // Ensures a resolved promise
+        ),
         signOut: jest.fn(),
     };
 });
@@ -91,13 +94,17 @@ describe("Login Component", () => {
         );
 
         fireEvent.change(screen.getByPlaceholderText(/Enter Your Email/i), { target: { value: 'test@example.com' } });
-        fireEvent.change(screen.getByPlaceholderText(/Enter Your Password/i), { target: { value: 'password123' } });
+        fireEvent.change(screen.getByPlaceholderText(/Enter Your Password/i), { target: { value: 'Password123!' } });
 
         await act(async()=>{
             fireEvent.click(screen.getByText(/Register/i));
-        })
+        });
 
-        expect(createUserWithEmailAndPassword).toHaveBeenCalledWith(expect.anything(), 'test@example.com', 'password123');
+        expect(createUserWithEmailAndPassword).toHaveBeenCalledWith(
+            expect.any(Object), // Accepts any object as the Firebase auth instance
+            "test@example.com", 
+            "Password123!"
+        );
     });
 
     // Simulating clicking the sign out button

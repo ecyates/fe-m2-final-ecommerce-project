@@ -39,6 +39,7 @@ const Login = () => {
     // Function to handle registering a new user
     const handleRegister = async (e: FormEvent) => {
         e.preventDefault();
+        console.log("Register function called");  // Add this line to verify it's being triggered
         // Validate the password and return error if applicable
         const passwordError = validatePassword(password);
         if (passwordError) {

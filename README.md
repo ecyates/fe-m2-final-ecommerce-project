@@ -13,6 +13,7 @@ This e-commerce project features a streamlined Continuous Integration and Contin
 ## Technologies Used
 
 - **React**: Front-end framework
+- **React Bootstrap**: Styling
 - **Redux Toolkit**: State management
 - **React Router**: Navigation between application views
 - **Firebase**: Authentication and Firestore database
