@@ -6,7 +6,7 @@ import { db } from '../../firebaseConfig';
 import { collection, addDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { Product } from '../../utilities/objectUtilities';
 import { useAuth } from '../../context/AuthContext';
-import NoAccess from '../NoAccess';
+import NoAccess from '../Other/NoAccess';
 
 const ProductForm = () => {
     const { id } = useParams();

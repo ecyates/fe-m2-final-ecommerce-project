@@ -1,15 +1,15 @@
 import { Container, Button, Spinner, Alert } from "react-bootstrap";
-import ProductCatalog from "./Products/ProductCatalog";
+import ProductCatalog from "../Products/ProductCatalog";
 import { useState, useEffect } from "react";
 import { faChevronCircleRight, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { auth } from "../firebaseConfig";
+import { auth } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebaseConfig";
-import { User } from "../utilities/objectUtilities";
+import { db } from "../../firebaseConfig";
+import { User } from "../../utilities/objectUtilities";
 
 function HomePage(){
     const { user, loading, error } = useAuth();

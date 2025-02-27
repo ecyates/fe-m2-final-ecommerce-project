@@ -1,6 +1,6 @@
 // Login.test.tsx
 import React = require("react");
-import Login from "../components/Login";
+import Login from "../components/Other/Login";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, getAuth } from "firebase/auth";

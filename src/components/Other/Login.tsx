@@ -2,12 +2,12 @@
 import React from "react";
 import { useState, FormEvent } from "react";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
-import { auth } from "../firebaseConfig";
+import { auth } from "../../firebaseConfig";
 import { Form, Button, Container, Spinner, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { setDoc, doc } from "firebase/firestore";
-import { db } from "../firebaseConfig";
+import { db } from "../../firebaseConfig";
 
 const Login = () => {
     const [email, setEmail] = useState<string>('');

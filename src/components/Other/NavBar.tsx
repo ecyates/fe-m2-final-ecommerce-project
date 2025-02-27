@@ -1,16 +1,16 @@
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBagShopping, faCartShopping, faHouse, faChevronCircleRight, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'; 
-import { auth } from '../firebaseConfig';
+import { auth } from '../../firebaseConfig';
 import { useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
-import { Cart } from '../utilities/objectUtilities';
-import { db } from '../firebaseConfig';
+import { Cart } from '../../utilities/objectUtilities';
+import { db } from '../../firebaseConfig';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store';
+import { RootState } from '../../store';
 
 function NavBar(){
     const navigate = useNavigate();

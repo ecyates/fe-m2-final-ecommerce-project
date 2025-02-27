@@ -1,3 +1,19 @@
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+}
+
+footer {
+  margin-top: auto;
+  padding: 10px 0; /* Optional: Add padding */
+}
+
 .customButton {
   background-color: white;
   border: none;
@@ -25,7 +41,7 @@ h2 {
   font-size: 50px;
 }
 
-.navbar, .navbar-brand {
+.navbar, .navbar-brand, footer {
   background-color: #d0e5df;
   color: #1e3055;
 }

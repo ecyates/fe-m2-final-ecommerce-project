@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { User } from '../../utilities/objectUtilities';
 import { useAuth } from '../../context/AuthContext';
-import NoAccess from '../NoAccess';
+import NoAccess from '../Other/NoAccess';
 
 const UserProfileForm: React.FC<UserProfileFormProps> = ({userId}) => {
     const { user } = useAuth();
