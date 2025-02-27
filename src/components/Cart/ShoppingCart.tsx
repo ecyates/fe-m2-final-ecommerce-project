@@ -19,6 +19,8 @@ const ShoppingCart: React.FC = () => {
     const { user } = useAuth();
     const dispatch = useDispatch<AppDispatch>();
 
+    console.log(cart);
+
     // Fetch products and set cart whenever the products or cart are updated or dispatch is used
     useEffect(()=>{
         const getProducts = (id:string) => {

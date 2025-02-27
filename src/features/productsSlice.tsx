@@ -62,11 +62,3 @@ const productsSlice = createSlice({
 });
 
 export default productsSlice.reducer;
-
-
-        // const response = await fetch('https://fakestoreapi.com/products');
-        // if (!response.ok){
-        //     throw new Error('Failed to fetch products.')
-        // }
-        // const products = await response.json();
-        // return products;

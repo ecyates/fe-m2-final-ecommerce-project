@@ -17,27 +17,6 @@ function NavBar(){
     const { user } = useAuth();
     const cartCount = useSelector((state:RootState)=>state.cart.totalItems);
 
-    // useEffect(()=>{
-    //     const fetchCartCount = async () =>{
-    //         let cart = { products: {}, totalItems: 0 };
-    //         // Fetch user cart only if user exists
-    //         if (user) {
-    //             const cartRef = doc(db, 'cart', user.uid);
-    //             const cartSnap = await getDoc(cartRef);
-    //             if (cartSnap.exists()) {
-    //                 cart = (cartSnap.data() as Cart);
-    //             }
-    //         }else{
-    //             const guestCart = localStorage.getItem('guest-cart');
-    //             if (guestCart){
-    //                 cart = JSON.parse(guestCart);
-    //             }
-    //         }
-    //         setCartCount(cart.totalItems);
-    //     }
-    //     fetchCartCount();
-    // }, []);
-
     const handleLogout = async () =>{
         try {
             await signOut(auth);

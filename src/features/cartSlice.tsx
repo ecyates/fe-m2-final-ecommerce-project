@@ -8,6 +8,7 @@ import { Timestamp } from "firebase/firestore";
 const initialState:Cart = loadCartFromSession() || {
     products:{}, 
     totalItems:0,
+    totalPrice: 0,
 }
 
 export const cartSlice = createSlice({
@@ -40,7 +41,6 @@ export const cartSlice = createSlice({
             state.products = {};
             state.totalItems = 0;
             state.totalPrice = 0;
-
         },
     },
 });

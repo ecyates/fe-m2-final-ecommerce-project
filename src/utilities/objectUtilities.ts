@@ -1,4 +1,3 @@
-import { Timestamp } from "firebase/firestore";
 export interface Product {
     id?: string;
     title:string;
