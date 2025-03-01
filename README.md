@@ -62,6 +62,7 @@ This e-commerce project features a streamlined Continuous Integration and Contin
 #### **Other Components**
 - **HomePage**: Contains an introduction and the ProductCatalog.
 - **NavBar**: Appears on all pages for navigation.
+- **Footer**: Appears on all pages.
 - **NoAccess**: Displays when users attempt to access restricted pages.
 - **NotFound**: Displays for unknown routes.
 

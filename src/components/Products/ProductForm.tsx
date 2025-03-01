@@ -129,7 +129,7 @@ const ProductForm = () => {
             </Container>
         );
     }else{
-        return(<>(!isLoading&&<NoAccess/>)</>);
+        return(<>{!isLoading&&<NoAccess/>}</>);
     }
 };
 

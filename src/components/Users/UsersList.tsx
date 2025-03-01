@@ -7,12 +7,16 @@ import { collection, getDocs } from 'firebase/firestore';
 import { User } from '../../utilities/objectUtilities';
 import UserCard from './UserCard';
 import UserProfileForm from './UserProfileForm';
+import { useAuth } from '../../context/AuthContext';
+import NoAccess from '../Other/NoAccess';
 
 const UsersList = () => {
     const { id } = useParams();
     const [users, setUsers] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>('');
+    const { user } = useAuth();
+    
 
     // Fetch users on mount
     useEffect(() => {
@@ -31,6 +35,10 @@ const UsersList = () => {
         fetchUsers();
     }, []);
 
+
+    // This is a restricted page. If there is no user, show No Access page
+    if(!user)return(<NoAccess/>);
+
     return (
         <Container className='product-catalog p-3 rounded mt-5 p-5 shadow-lg'>            
         <div> 
@@ -42,7 +50,7 @@ const UsersList = () => {
         {error&&<Alert variant='danger'>{error}</Alert>}
         </div>
             {users.length === 0 ? (
-                (!isLoading&&<span>Currently no users...</span>)
+                <>{!isLoading&&<span>Currently no users...</span>}</>
             ) : (<>{users.map((u) => (
                     <Col key={u.id} className='mb-3'>
                         <UserCard userId={u.id}/>
